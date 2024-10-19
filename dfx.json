@@ -1,0 +1,29 @@
+{
+  "canisters": {
+    "pokg_game_backend": {
+      "main": "src/pokg_game_backend/main.mo",
+      "type": "motoko"
+    },
+    "pokg_game_frontend": {
+      "dependencies": [
+        "pokg_game_backend"
+      ],
+      "frontend": {
+        "entrypoint": "src/pokg_game_frontend/src/index.html"
+      },
+      "source": [
+        "src/pokg_game_frontend/assets",
+        "dist/pokg_game_frontend/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
