@@ -1,22 +1,21 @@
 import { Actor, HttpAgent } from "@dfinity/agent";
-import { idlFactory as greet_idl } from "./greet.did.js";
-import { idlFactory as random_idl } from "./random_position.did.js";
+import { idlFactory as pokg_game_backend_idl } from "../../declarations/pokg_game_backend/pokg_game_backend.did.js";
 
-const agent = new HttpAgent();
-const greet = Actor.createActor(greet_idl, { agent, canisterId: "YOUR_GREETING_CANISTER_ID" });
-const randomPosition = Actor.createActor(random_idl, { agent, canisterId: "YOUR_RANDOM_POSITION_CANISTER_ID" });
+const agent = new HttpAgent({ host: 'http://127.0.0.1:4943' });
+agent.fetchRootKey(); // Disable certificate verification in development mode
 
-document.getElementById("greetButton").addEventListener("click", async () => {
-    const name = document.getElementById("name").value;
-    const greeting = await greet.greet(name);
-    document.getElementById("greeting").innerText = greeting;
-});
+const randomPosition = Actor.createActor(pokg_game_backend_idl, { agent, canisterId: "bkyz2-fmaaa-aaaaa-qaaaq-cai" });
 
 async function movePoint() {
     const point = document.getElementById('point');
-    const [x, y] = await randomPosition.getRandomPosition();
-    point.style.left = `${x}px`;
-    point.style.top = `${y}px`;
+    const result = await randomPosition.getRandomPosition();
+    if (result) {
+        const [x, y] = result;
+        point.style.left = `${x}px`;
+        point.style.top = `${y}px`;
+    } else {
+        console.error("Undefined result from backend");
+    }
 }
 
 setInterval(movePoint, 1000);
