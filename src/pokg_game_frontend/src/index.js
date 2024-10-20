@@ -1,19 +1,22 @@
-import { pokg_game_backend } from "../../declarations/pokg_game_backend";
+import { Actor, HttpAgent } from "@dfinity/agent";
+import { idlFactory as greet_idl } from "./greet.did.js";
+import { idlFactory as random_idl } from "./random_position.did.js";
 
-document.querySelector("form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const button = e.target.querySelector("button");
+const agent = new HttpAgent();
+const greet = Actor.createActor(greet_idl, { agent, canisterId: "YOUR_GREETING_CANISTER_ID" });
+const randomPosition = Actor.createActor(random_idl, { agent, canisterId: "YOUR_RANDOM_POSITION_CANISTER_ID" });
 
-  const name = document.getElementById("name").value.toString();
-
-  button.setAttribute("disabled", true);
-
-  // Interact with foo actor, calling the greet method
-  const greeting = await pokg_game_backend.greet(name);
-
-  button.removeAttribute("disabled");
-
-  document.getElementById("greeting").innerText = greeting;
-
-  return false;
+document.getElementById("greetButton").addEventListener("click", async () => {
+    const name = document.getElementById("name").value;
+    const greeting = await greet.greet(name);
+    document.getElementById("greeting").innerText = greeting;
 });
+
+async function movePoint() {
+    const point = document.getElementById('point');
+    const [x, y] = await randomPosition.getRandomPosition();
+    point.style.left = `${x}px`;
+    point.style.top = `${y}px`;
+}
+
+setInterval(movePoint, 1000);

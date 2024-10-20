@@ -1,29 +1,25 @@
 {
   "canisters": {
-    "pokg_game_backend": {
-      "main": "src/pokg_game_backend/main.mo",
-      "type": "motoko"
+    "random_position": {
+      "type": "motoko",
+      "main": "src/pokg_game/random_position/main.mo",
+      "candid": "src/pokg_game/random_position/random_position.did"
     },
-    "pokg_game_frontend": {
-      "dependencies": [
-        "pokg_game_backend"
-      ],
-      "frontend": {
-        "entrypoint": "src/pokg_game_frontend/src/index.html"
-      },
-      "source": [
-        "src/pokg_game_frontend/assets",
-        "dist/pokg_game_frontend/"
-      ],
-      "type": "assets"
+    "greet": {
+      "type": "motoko",
+      "main": "src/pokg_game/greet/main.mo",
+      "candid": "src/pokg_game/greet/greet.did"
+    },
+    "frontend": {
+      "type": "assets",
+      "source": "src/pokg_game/"
     }
   },
-  "defaults": {
-    "build": {
-      "args": "",
-      "packtool": ""
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000",
+      "type": "ephemeral"
     }
   },
-  "output_env_file": ".env",
   "version": 1
 }
